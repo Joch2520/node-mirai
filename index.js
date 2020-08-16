@@ -9,6 +9,7 @@ const events = require('./src/events.json');
 
 const init = require('./src/init');
 const verify = require('./src/verify');
+const about = require('./src/about');
 const release = require('./src/release');
 const fetchMessage = require('./src/fetchMessage');
 const recall = require('./src/recall');
@@ -143,6 +144,20 @@ class NodeMirai {
       console.error('Unknown error @ fetchMessage:', e.message);
       return [];
       // process.exit(1);
+    });
+  }
+
+  /**
+   * 获取插件信息
+   */
+  async about () {
+    return about(this.host).then(({ code, errorMessage, data }) => {
+      if (code !== 0) {
+        console.error('Failed @ about:', errorMessage);
+        // process.exit(1);
+        return { code, errorMessage, data };
+      }
+      return { code, errorMessage, data };
     });
   }
 
@@ -403,7 +418,7 @@ class NodeMirai {
         quote: group,
         sessionKey: this.sessionKey,
         host: this.host,
-      });    
+      });
     else
       return sendQuotedTempMessage({
         messageChain: message,
@@ -677,7 +692,7 @@ class NodeMirai {
       sessionKey: this.sessionKey,
     });
   }
-  
+
   /**
    * @method NodeMirai#handleMemberJoinRequest
    * @description 处理用户入群申请
